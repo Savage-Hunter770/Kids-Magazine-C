@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "games.h"
 
 // Function declarations
 void showMenu();
@@ -17,8 +18,8 @@ int main() {
                 break;
 
             case 2:
-                printf("Games section coming soon...\n\n");
-                break;
+                playNumberGame();
+                 break;
 
             case 3:
                 printf("Quiz section coming soon...\n\n");
