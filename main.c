@@ -3,8 +3,14 @@
 #include "quiz.h"
 // Function declarations
 void showMenu();
+char playerName[50];
 
 int main() {
+    printf("Enter your name: ");
+    scanf("%s", playerName);
+
+    printf("\nWelcome %s to Kids Magazine!\n\n", playerName);
+
     int choice;
 
     do {

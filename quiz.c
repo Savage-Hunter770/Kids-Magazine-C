@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include "quiz.h"
+#include "file_system.h"
+
+extern char playerName[50];
 
 struct Question {
     char question[100];
@@ -46,5 +49,8 @@ void startQuiz() {
         }
     }
 
-    printf("\nFinal Score: %d/3\n", score);
+    printf("\n=====================\n");
+    printf("Final Score: %d/3\n", score);
+    printf("=====================\n");
+    saveScore(playerName, score);
 }
