@@ -14,3 +14,24 @@ void saveScore(char name[], int score) {
 
     printf("Score saved successfully!\n");
 }
+
+void showLeaderboard() {
+    FILE *file = fopen("scores.txt", "r");
+
+    if(file == NULL) {
+        printf("No scores available yet!\n");
+        return;
+    }
+
+    char line[100];
+
+    printf("\n===== Leaderboard =====\n");
+
+    while(fgets(line, sizeof(line), file)) {
+        printf("%s", line);
+    }
+
+    printf("=======================\n");
+
+    fclose(file);
+}
