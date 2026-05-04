@@ -2,5 +2,6 @@
 #define GAMES_H
 
 void playNumberGame();
+void playRPS();
 
 #endif
