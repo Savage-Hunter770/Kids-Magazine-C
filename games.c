@@ -7,6 +7,30 @@
 
 extern char playerName[50];
 
+
+// ===================== INPUT VALIDATION =====================
+int getValidChoice(int min, int max) {
+    int choice;
+    int result;
+
+    while (1) {
+        result = scanf("%d", &choice);
+
+        if (result != 1) {
+            printf("Invalid input! Enter a number.\n");
+            while (getchar() != '\n'); // clear buffer
+        }
+        else if (choice < min || choice > max) {
+            printf("Invalid choice! Enter between %d and %d.\n", min, max);
+        }
+        else {
+            return choice;
+        }
+    }
+}
+
+
+// ===================== NUMBER GAME =====================
 void playNumberGame() {
     int number, guess;
 
@@ -17,7 +41,7 @@ void playNumberGame() {
     printf("Guess a number between 1 and 10:\n");
 
     do {
-        scanf("%d", &guess);
+        guess = getValidChoice(1, 10);
 
         if (guess > number)
             printf("Too high! Try again:\n");
@@ -29,6 +53,8 @@ void playNumberGame() {
     } while (guess != number);
 }
 
+
+// ===================== RPS HELPERS =====================
 const char* getChoiceName(int choice) {
     if (choice == 1) return "Rock";
     if (choice == 2) return "Paper";
@@ -45,19 +71,22 @@ void countdown() {
     printf("GO!\n\n");
 }
 
+
+// ===================== ROCK PAPER SCISSORS =====================
 void playRPS() {
     int user, computer;
     char again;
-    int wins = 0, losses = 0, draws = 0, score = 0;
-    int rounds = 0;
+    int score = 0;   // total score across matches
 
     do {
+        int wins = 0, losses = 0, draws = 0;
+
         printf("\n🎮 Rock Paper Scissors (Best of 3) 🎮\n");
 
         while (wins < 2 && losses < 2) {
             printf("\n1. Rock\n2. Paper\n3. Scissors\n");
             printf("Enter your choice: ");
-            scanf("%d", &user);
+            user = getValidChoice(1, 3);
 
             countdown();
 
@@ -83,8 +112,6 @@ void playRPS() {
                 score--;
             }
 
-            rounds++;
-
             printf("Score → You: %d | Computer: %d | Draws: %d\n",
                    wins, losses, draws);
         }
@@ -94,11 +121,20 @@ void playRPS() {
         else
             printf("\n💀 You LOST the match!\n");
 
-        printf("\nPlay again? (y/n): ");
-        scanf(" %c", &again);
+        // VALIDATE y/n INPUT
+        do {
+            printf("\nPlay again? (y/n): ");
+            scanf(" %c", &again);
+
+            if (again != 'y' && again != 'Y' && again != 'n' && again != 'N') {
+                printf("Invalid choice! Enter y or n.\n");
+            }
+
+        } while (again != 'y' && again != 'Y' && again != 'n' && again != 'N');
 
     } while (again == 'y' || again == 'Y');
 
+    // Save final accumulated score
     saveScore(playerName, score);
     printf("Score updated in leaderboard!\n");
 }

@@ -3,5 +3,6 @@
 
 void playNumberGame();
 void playRPS();
+int getValidChoice(int min, int max);
 
 #endif
