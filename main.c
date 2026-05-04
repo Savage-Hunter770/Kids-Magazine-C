@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "games.h"
-
+#include "quiz.h"
 // Function declarations
 void showMenu();
 
@@ -19,11 +19,11 @@ int main() {
 
             case 2:
                 playNumberGame();
-                 break;
+                break;
 
             case 3:
-                printf("Quiz section coming soon...\n\n");
-                break;
+            startQuiz();
+            break;
 
             case 4:
                 printf("Exiting... Goodbye!\n");
