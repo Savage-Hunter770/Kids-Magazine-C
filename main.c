@@ -4,6 +4,7 @@
 #include "games.h"
 #include "quiz.h"
 #include "file_system.h"
+#include "story.h"
 
 // Function declarations
 void showMenu();
@@ -28,7 +29,7 @@ int main() {
 
         switch(choice) {
             case 1:
-                printf("Stories section coming soon...\n\n");
+                startStory();
                 break;
 
             case 2: {

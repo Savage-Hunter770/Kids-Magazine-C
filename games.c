@@ -33,24 +33,73 @@ int getValidChoice(int min, int max) {
 // ===================== NUMBER GAME =====================
 void playNumberGame() {
     int number, guess;
+    int difficulty;
+    int maxRange, attempts;
+    int tries = 0;
+    int score = 0;
 
     srand(time(0));
-    number = rand() % 10 + 1;
 
     printf("\n🎮 Number Guessing Game 🎮\n");
-    printf("Guess a number between 1 and 10:\n");
+    printf("\nSelect Difficulty:\n");
+    printf("1. EASY\n2. MEDIUM\n3. HARD\n");
 
-    do {
-        guess = getValidChoice(1, 10);
+    difficulty = getValidChoice(1, 3);
+
+    // 🔥 Difficulty settings
+    if (difficulty == 1) {
+        maxRange = 10;
+        attempts = -1;  // unlimited
+    }
+    else if (difficulty == 2) {
+        maxRange = 50;
+        attempts = 10;
+    }
+    else {
+        maxRange = 100;
+        attempts = 7;
+    }
+
+    number = rand() % maxRange + 1;
+
+    printf("\nGuess a number from 1 to %d:\n", maxRange);
+
+    while (1) {
+        guess = getValidChoice(1, maxRange);
+        tries++;
 
         if (guess > number)
             printf("Too high! Try again:\n");
         else if (guess < number)
             printf("Too low! Try again:\n");
-        else
-            printf("Correct! 🎉\n");
+        else {
+            printf("Correct! 👑\n");
 
-    } while (guess != number);
+            // 🎯 SCORE SYSTEM
+            if (difficulty == 1) score = 1;
+            else if (difficulty == 2) score = 2;
+            else score = 3;
+
+            // Bonus: fewer tries = more reward
+            if (tries <= 3) score += 1;
+
+            printf("You earned %d points!\n", score);
+
+            saveScore(playerName, score);
+            printf("Score updated in leaderboard!\n");
+
+            break;
+        }
+
+        if (attempts != -1) {
+            printf("Attempts left: %d\n", attempts - tries);
+        }
+
+        if (attempts != -1 && tries >= attempts) {
+            printf("💀 Game Over! The number was %d\n", number);
+            break;
+        }
+    }
 }
 
 
