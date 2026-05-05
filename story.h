@@ -1,6 +1,7 @@
-#ifndef STORY_H
-#define STORY_H
+#ifndef STORY_H // If STORY_H is NOT defined yet (first time including this file)
+#define STORY_H // Define STORY_H to mark this file as included
 
+// ... Function declarations here ...
 void startStory();
 
-#endif
+#endif // End of the condition started by #ifndef

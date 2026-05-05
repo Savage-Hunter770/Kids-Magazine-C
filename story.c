@@ -1,15 +1,17 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "story.h"
-#include "file_system.h"
-#include "games.h"
+#include <stdio.h>      // for printf, scanf
+#include <stdlib.h>     // for general functions (not heavily used here)
 
+#include "story.h"      // allows main.c to use startStory()
+#include "file_system.h"// allows us to use saveScore()
+#include "games.h"      // allows us to use getValidChoice()
+
+// This variable exists in main.c, we are just "borrowing" it here
 extern char playerName[50];
 
 // ---------------- FUNCTION PROTOTYPES ----------------
 void toddlerStory(int *health);
 void kidStory(int *health);
-void checkHealth(int health);
+int checkHealth(int health);
 
 // ---------------- MAIN STORY FUNCTION ----------------
 void startStory() {
@@ -19,11 +21,13 @@ void startStory() {
     printf("Enter your age: ");
     scanf("%d", &age);
 
+    // Check if age is allowed
     if (age < 3 || age > 11) {
         printf("\nSorry %s, this magazine is only for ages 3 to 11.\n", playerName);
-        return;
+        return; // stop the function immediately
     }
 
+    // Welcome message
     printf("\n--- Welcome %s to the Magic Magazine Adventure! ---\n", playerName);
     printf("Starting Health: %d\n", playerHealth);
 
@@ -33,11 +37,13 @@ void startStory() {
         kidStory(&playerHealth);
     }
 
+    // After story ends
     printf("\n%s, your journey is complete. Final Health: %d\n", playerName, playerHealth);
 
-    // 🎯 SCORING SYSTEM (your table)
+    // SCORING SYSTEM 
     int score;
 
+    // Convert health into score
     if (playerHealth <= 30) {
         score = 1;
     } else if (playerHealth <= 70) {
@@ -62,19 +68,17 @@ void startStory() {
     }
 }
 
-// ---------------- INPUT VALIDATION ----------------
-
-
 // ---------------- HEALTH CHECK ----------------
-void checkHealth(int health) {
+int checkHealth(int health) {
     if (health <= 0) {
-        printf("\n💀 Your health dropped to 0...\n");
+        printf("\nYour health dropped to 0...\n");
         printf("GAME OVER!\n");
-        exit(0);
+        return 0; //Dead
     }
+    return 1;// Alive
 }
 
-// ---------------- TODDLER STORY (LONG VERSION) ----------------
+// ---------------- TODDLER STORY ----------------
 void toddlerStory(int *health) {
     int choice;
 
@@ -85,18 +89,18 @@ void toddlerStory(int *health) {
     printf("It looks friendly and wants to play.\n");
     printf("1. Hug the tree\n2. Shake the tree\n");
 
-    choice = getValidChoice(1, 2);
+    choice = getValidChoice(1, 2); // Get valid input (only 1 or 2)
 
     if (choice == 1) {
         printf("The tree giggles happily and gives you a golden fruit! +20 Health\n");
-        *health += 20;
+        *health += 20; // increase health
     } else {
         printf("A beehive falls and bees chase you! You run away scared! -15 Health\n");
-        *health -= 15;
+        *health -= 15; // decrease health
     }
 
-    printf("Health: %d\n", *health);
-    checkHealth(*health);
+    printf("Health: %d\n", *health); // Show updated health
+    if (!checkHealth(*health)) return;    // Check if player died
 
     printf("\nThe tree whispers softly: 'Follow the river... it will take you home.'\n");
 
@@ -106,18 +110,18 @@ void toddlerStory(int *health) {
     printf("A glowing fish jumps out and says: 'I know a safe way!'\n");
     printf("1. Listen to the fish\n2. Ignore it and cross alone\n");
 
-    choice = getValidChoice(1, 2);
+    choice = getValidChoice(1, 2); // Get valid input (only 1 or 2)
 
     if (choice == 1) {
         printf("The fish shows you safe stepping stones across the river! +15 Health\n");
-        *health += 15;
+        *health += 15; // increase health
     } else {
         printf("You slip on wet rocks and fall into the cold water! -15 Health\n");
-        *health -= 15;
+        *health -= 15; // decrease health
     }
 
-    printf("Health: %d\n", *health);
-    checkHealth(*health);
+    printf("Health: %d\n", *health); // Show updated health
+    if (!checkHealth(*health)) return; // Check if player died
 
     printf("\nAfter crossing the river, you see a dark cave ahead.\n");
     printf("It is the only way forward...\n");
@@ -127,26 +131,26 @@ void toddlerStory(int *health) {
     printf("He is huge and blocks your path home.\n");
     printf("1. Sing a lullaby\n2. Try to run past him\n");
 
-    choice = getValidChoice(1, 2);
+    choice = getValidChoice(1, 2); // Get valid input (only 1 or 2)
 
     if (choice == 1) {
         printf("Your gentle song makes the giant smile in his sleep.\n");
         printf("He rolls over and clears the path! +10 Health\n");
-        *health += 10;
+        *health += 10; // increase health
     } else {
         printf("You trip while running and wake the giant!\n");
         printf("He stomps loudly and scares you! -25 Health\n");
-        *health -= 25;
+        *health -= 25; // decrease health
     }
 
-    printf("Health: %d\n", *health);
-    checkHealth(*health);
+    printf("Health: %d\n", *health); // Show updated health
+    if (!checkHealth(*health)) return; // Check if player died
 
     printf("\nYou quietly walk through the cave and finally find your way home.\n");
     printf("You feel proud of your adventure!\n");
 }
 
-// ---------------- KID STORY (LONG VERSION) ----------------
+// ---------------- KID STORY ----------------
 void kidStory(int *health) {
     int choice;
 
@@ -156,19 +160,19 @@ void kidStory(int *health) {
     printf("You notice an old map lying under a rock.\n");
     printf("1. Follow the map\n2. Trust your instincts\n");
 
-    choice = getValidChoice(1, 2);
+    choice = getValidChoice(1, 2); // Get valid input (only 1 or 2)
 
     if (choice == 1) {
         printf("The map guides you safely through the forest.\n");
         printf("You find a hidden potion glowing under a tree! +25 Health\n");
-        *health += 25;
+        *health += 25; // increase health
     } else {
         printf("You wander into thick thorns that scratch your skin badly! -20 Health\n");
-        *health -= 20;
+        *health -= 20; // decrease health
     }
 
-    printf("Health: %d\n", *health);
-    checkHealth(*health);
+    printf("Health: %d\n", *health); // Show updated health
+    if (!checkHealth(*health)) return; // Check if player died
 
     printf("\nAt the end of the forest, a ruined castle appears in the distance.\n");
 
@@ -178,20 +182,20 @@ void kidStory(int *health) {
     printf("The gate is locked, but a broken window is nearby.\n");
     printf("1. Sneak through the window\n2. Break the gate open\n");
 
-    choice = getValidChoice(1, 2);
+    choice = getValidChoice(1, 2); // Get valid input (only 1 or 2)
 
     if (choice == 1) {
         printf("You carefully climb through the window and avoid hidden traps.\n");
         printf("Inside, you discover a secret treasure room filled with magic! +30 Health\n");
-        *health += 30;
+        *health += 30; // increase health
     } else {
         printf("The loud crash alerts ghost guards!\n");
         printf("They surround you and attack from all sides! -30 Health\n");
-        *health -= 30;
+        *health -= 30; // decrease health
     }
 
-    printf("Health: %d\n", *health);
-    checkHealth(*health);
+    printf("Health: %d\n", *health); // Show updated health
+    if (!checkHealth(*health)) return; // Check if player died
 
     printf("\nAs you go deeper, the air becomes colder...\n");
     printf("A powerful presence awakens.\n");
@@ -201,20 +205,20 @@ void kidStory(int *health) {
     printf("'You shall not leave this place alive,' he says.\n");
     printf("1. Fight with your sword\n2. Use a magic spell\n");
 
-    choice = getValidChoice(1, 2);
+    choice = getValidChoice(1, 2); // Get valid input (only 1 or 2)
 
     if (choice == 2) {
         printf("Your magic spell shines brightly and breaks the darkness!\n");
         printf("The knight disappears into shadows! +40 Health\n");
-        *health += 40;
+        *health += 40; // increase health
     } else {
         printf("The knight is too powerful in combat!\n");
         printf("He strikes you down with heavy force! -50 Health\n");
-        *health -= 50;
+        *health -= 50; // decrease health
     }
 
-    printf("Health: %d\n", *health);
-    checkHealth(*health);
+    printf("Health: %d\n", *health); // Show updated health
+    if (!checkHealth(*health)) return; // Check if player died
 
     printf("\nThe castle begins to collapse as light returns.\n");
     printf("You escape just in time... victorious!\n");

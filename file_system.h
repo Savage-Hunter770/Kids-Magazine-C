@@ -1,10 +1,10 @@
-#ifndef FILE_SYSTEM_H
-#define FILE_SYSTEM_H
+#ifndef FILE_SYSTEM_H // If FILE_SYSTEM_H is NOT defined yet (first time including this file)
+#define FILE_SYSTEM_H // Define FILE_SYSTEM_H to mark this file as included
 
+// ... Function declarations here ...
 void saveScore(char name[], int score);
 void showLeaderboard();
-void saveScore(char name[], int score);
 void resetLeaderboard();
 int getPlayerScore(char playerName[]);
 
-#endif
+#endif // End of the condition started by #ifndef

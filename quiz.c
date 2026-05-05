@@ -1,26 +1,35 @@
-#include <stdio.h>
-#include <string.h>
-#include "quiz.h"
-#include "file_system.h"
+#include <stdio.h>      // for printf and scanf (input/output)
+#include <string.h>     // for string functions (not heavily used here)
 
+#include "quiz.h"       // allows main.c to call startQuiz()
+#include "file_system.h"// allows saving and retrieving scores
+
+// This variable is defined in main.c, we are using it here
 extern char playerName[50];
 
+// ---------------- STRUCT DEFINITION ----------------
+// This defines what a "Question" looks like
 struct Question {
-    char question[100];
-    char options[4][50];
-    int correct;
+    char question[100];      // stores the question text
+    char options[4][50];     // stores 4 possible answers (each is a string)
+    int correct;             // stores index of correct answer (0 to 3)
 };
 
+// ---------------- MAIN QUIZ FUNCTION ----------------
 void startQuiz() {
-    int difficulty;
+    int difficulty; // stores user's difficulty choice
 
+    // Ask user to choose difficulty
     printf("\nChoose difficulty:\n");
     printf("1. Easy\n2. Medium\n3. Hard\n");
     scanf("%d", &difficulty);
 
+    // ---------------- QUIZ DATA ----------------
+    // 2D array:
+    // 3 difficulties × 5 questions each
     struct Question quiz[3][5] = {
 
-        // EASY
+        // ---------------- EASY QUESTIONS ----------------
         {
             {"What color is the sky?",
              {"Blue", "Red", "Green", "Yellow"},
@@ -43,7 +52,7 @@ void startQuiz() {
              2}
         },
 
-        // MEDIUM
+        // ---------------- MEDIUM QUESTIONS ----------------
         {
             {"Which planet do we live on?",
              {"Mars", "Earth", "Venus", "Jupiter"},
@@ -66,7 +75,7 @@ void startQuiz() {
              1}
         },
 
-        // HARD
+        // ---------------- HARD QUESTIONS ----------------
         {
             {"How many continents are there?",
              {"5", "6", "7", "8"},
@@ -90,39 +99,56 @@ void startQuiz() {
         }
     };
 
-    int score = 0;
-    int answer;
-    int level = difficulty - 1;
+    // ---------------- VARIABLES ----------------
+    int score = 0;              // counts correct answers
+    int answer;                 // stores user's answer
+    int level = difficulty - 1; // convert 1–3 → 0–2 for array indexing
 
+    // ---------------- VALIDATE DIFFICULTY ----------------
     if (level < 0 || level > 2) {
         printf("Invalid difficulty!\n");
-        return;
+        return; // stop the function if input is wrong
     }
 
     printf("\n--- Quiz Started ---\n");
 
+    // ---------------- QUESTION LOOP ----------------
+    // Loop through 5 questions for the chosen difficulty
     for (int i = 0; i < 5; i++) {
         printf("\nQ%d: %s\n", i + 1, quiz[level][i].question);
 
+        // ---------------- OPTIONS LOOP ----------------
+        // Loop through 4 options for the current question
         for (int j = 0; j < 4; j++) {
+
+            // Print each option
+            // j+1 makes numbering start from 1 instead of 0
             printf("%d. %s\n", j + 1, quiz[level][i].options[j]);
         }
 
+        // Ask user for answer
         printf("Your answer: ");
         scanf("%d", &answer);
 
+        // ---------------- CHECK ANSWER ----------------
+        // answer - 1 converts user input (1–4) to index (0–3)
         if (answer - 1 == quiz[level][i].correct) {
             printf("Correct!\n");
-            score++;
+            score++; // increase score if correct
         } else {
             printf("Wrong!\n");
         }
     }
 
+    // ---------------- FINAL SCORE ----------------
     printf("\nYou scored: %d\n", score);
 
+    // Save score to file_system.c
     saveScore(playerName, score);
 
+    // Get updated total score from file_system.c and display it
     int total = getPlayerScore(playerName);
+
+    // Display updated total score
     printf("Total Score Updated: %d\n", total);
 }
